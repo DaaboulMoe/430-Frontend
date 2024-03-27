@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { TextField, Button, Grid } from '@mui/material'; 
 import config from '../config'; // Import the config file 
 import { useNavigate } from "react-router-dom";
+import { getUserToken, saveUserToken, clearUserToken } from "../utils/localStorage";  //To handle user tokens
 
-const LoginPage = ({ userToken, setUserToken }) => {
+const LoginPage = ({ userToken, setUserToken, states, setAuthState }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -11,8 +12,7 @@ const LoginPage = ({ userToken, setUserToken }) => {
     password: '', 
   });
 
-  const backendUrl = config.apiUrl;
-  console.log(backendUrl);
+  const backendUrl = config.apiUrl; 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,41 +22,16 @@ const LoginPage = ({ userToken, setUserToken }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
- 
-    try {
-      const response = await fetch(backendUrl + '/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          password: formData.password, // Send the hashed password
-        }),
-      });
-      console.log(response);
-      if (!response.ok) {
-        throw new Error('Failed to login');
-      }
-
-      // Handle successful login
-      console.log('Login successful');
-      setUserToken(true);
-      navigate("/");
-
-    } catch (error) {
-      console.error('Login error:', error.message);
-    }
-  };
 
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} sm={8} md={6}>
         <div>
           <h2>Login</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(e) => {
+              e.preventDefault(); // Prevent default form submission
+              login(formData.username, formData.password, setAuthState, setUserToken, navigate, states); // Call login function with username and password
+          }}>
             <TextField
               label="Username"
               id="username"
@@ -86,4 +61,25 @@ const LoginPage = ({ userToken, setUserToken }) => {
   );
 };
 
+function login(username, password, setAuthState, setUserToken, navigate, states) {
+  return fetch(config.apiUrl + "/login", {
+  method: "POST",
+  headers: {
+  "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+  username: username,
+  password: password,
+  }),
+  })
+  .then((response) => response.json())
+  .then((body) => {
+  setAuthState(states.USER_AUTHENTICATED);
+  setUserToken(body.token); 
+  saveUserToken(body.token);
+  navigate("/");
+  }); 
+}
+
 export default LoginPage;
+export {login};

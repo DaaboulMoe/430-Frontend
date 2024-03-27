@@ -2,9 +2,10 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom'; 
 import { useNavigate } from "react-router-dom";
+import {clearUserToken } from "../utils/localStorage";  //To handle user tokens
 
 
-function Navbar({ userToken, setUserToken }) {  
+function Navbar({ userToken, setUserToken, setAuthState, states}) {  
   const navigate = useNavigate();
 
   return (
@@ -12,11 +13,16 @@ function Navbar({ userToken, setUserToken }) {
       <Toolbar classes={{ root: "nav" }}>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Flex Factor
-        </Typography>
-        {console.log(userToken)}
-        {userToken ? (
+        </Typography> 
+        {userToken !== null ? (
           <>
-            <Button color="inherit" onClick={() =>{setUserToken(false); navigate("/")}}>Logout</Button>
+            <Button color="inherit" onClick={() =>{
+                      setAuthState(states.PENDING); 
+                      clearUserToken();
+                      setUserToken(null);
+                      navigate("/")}}>
+                Logout
+            </Button>
             <Button color="inherit" component={Link} to="/profile">My Profile</Button>
           </>
         ) : (
