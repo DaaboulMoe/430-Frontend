@@ -3,8 +3,9 @@ import { TextField, Button, Grid } from '@mui/material';
 import config from '../config'; // Import the config file 
 import { useNavigate } from "react-router-dom";
 import { getUserToken, saveUserToken, clearUserToken } from "../utils/localStorage";  //To handle user tokens
+import {States, persona} from '../utils/constants'
 
-const LoginPage = ({ userToken, setUserToken, states, setAuthState }) => {
+const LoginPage = ({ userToken, setUserToken, setAuthState }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ const LoginPage = ({ userToken, setUserToken, states, setAuthState }) => {
           <h2>Login</h2>
           <form onSubmit={(e) => {
               e.preventDefault(); // Prevent default form submission
-              login(formData.username, formData.password, setAuthState, setUserToken, navigate, states); // Call login function with username and password
+              login(formData.username, formData.password, setAuthState, setUserToken, navigate, States); // Call login function with username and password
           }}>
             <TextField
               label="Username"
@@ -61,7 +62,7 @@ const LoginPage = ({ userToken, setUserToken, states, setAuthState }) => {
   );
 };
 
-function login(username, password, setAuthState, setUserToken, navigate, states) {
+function login(username, password, setAuthState, setUserToken, navigate, States) {
   return fetch(config.apiUrl + "/login", {
   method: "POST",
   headers: {
@@ -74,7 +75,7 @@ function login(username, password, setAuthState, setUserToken, navigate, states)
   })
   .then((response) => response.json())
   .then((body) => {
-  setAuthState(states.USER_AUTHENTICATED);
+  setAuthState(States.USER_AUTHENTICATED);
   setUserToken(body.token); 
   saveUserToken(body.token);
   navigate("/");

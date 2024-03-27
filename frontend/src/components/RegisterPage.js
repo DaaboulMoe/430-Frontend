@@ -3,8 +3,9 @@ import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } fr
 import config from '../config'; // Import the config file 
 import { useNavigate } from "react-router-dom";
 import { login } from "./LoginPage";
+import {States, persona} from '../utils/constants'
 
-const RegisterPage = ({ userToken, setUserToken, setAuthState, states }) => {
+const RegisterPage = ({ userToken, setUserToken, setAuthState }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -44,7 +45,7 @@ const RegisterPage = ({ userToken, setUserToken, setAuthState, states }) => {
         address: address
       }),
     })
-    .then((response) => login(username, password, setAuthState, setUserToken, navigate, states)); 
+    .then((response) => login(username, password, setAuthState, setUserToken, navigate, States)); 
   };
 
   return (
