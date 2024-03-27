@@ -3,7 +3,7 @@ import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid } fr
 import config from '../config'; // Import the config file 
 import { useNavigate } from "react-router-dom";
 
-const RegisterPage = () => {
+const RegisterPage = ({ userToken, setUserToken }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -42,6 +42,7 @@ const RegisterPage = () => {
 
       // Handle successful registration
       console.log('Registration successful');
+      setUserToken(true);
       navigate("/");
 
     } catch (error) {

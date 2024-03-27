@@ -10,16 +10,14 @@ import HomePage from './components/HomePage'; // Import the HomePage
 function App() {
   let [userToken, setUserToken] = useState(false);
   return ( 
-      <div>
-        {/* <AuthProvider> */}
+      <div> 
           <Navbar userToken={userToken} setUserToken={setUserToken}/>
             <Routes> 
               <Route path="/" element={<HomePage />} /> {/* Set the default route to render HomePage */}            
-              <Route path="/register" element={<RegisterPage />} /> 
+              <Route path="/register" element={<RegisterPage userToken={userToken} setUserToken={setUserToken} />} /> 
               <Route path="/login" element={<LoginPage  userToken={userToken} setUserToken={setUserToken} />} />
               <Route path="/profile" element={<ProfilePage />} />
-            </Routes> 
-        {/* </AuthProvider> */}
+            </Routes>  
       </div> 
   );
 }

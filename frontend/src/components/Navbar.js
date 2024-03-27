@@ -1,8 +1,11 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom'; 
+import { useNavigate } from "react-router-dom";
+
 
 function Navbar({ userToken, setUserToken }) {  
+  const navigate = useNavigate();
 
   return (
     <AppBar position="static" style={{ margin: 0 }}>
@@ -13,7 +16,7 @@ function Navbar({ userToken, setUserToken }) {
         {console.log(userToken)}
         {userToken ? (
           <>
-            <Button color="inherit" onClick={() =>{setUserToken(false);}}>Logout</Button>
+            <Button color="inherit" onClick={() =>{setUserToken(false); navigate("/")}}>Logout</Button>
             <Button color="inherit" component={Link} to="/profile">My Profile</Button>
           </>
         ) : (
